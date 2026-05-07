@@ -1334,6 +1334,10 @@ function activeItemEvents(selector) {
             if (isCurrentSong && isSameContext) {
                 playPause();
             } else {
+                
+                if (lyricsActive) {
+                    btnLyrics.click();
+                }
                 // Nueva reproducción (cambio de canción o cambio de contexto)
                 currentSongId = id;
 
@@ -1867,15 +1871,63 @@ btnLyrics.addEventListener("click", () => {
     }
 });
 
+let requestId = 0;
+let ultimaCancion = null;
+
+window.addEventListener("online", () => {
+
+    if (!ultimaCancion) return;
+
+    obtenerLetra(
+        ultimaCancion.trackName,
+        ultimaCancion.trackArtist
+    );
+});
+
+obtenerLetra("", "");
+
 async function obtenerLetra(trackName, trackArtist) {
+
+    ultimaCancion = {
+        trackName,
+        trackArtist
+    };
+
+
+    let currentSong = songName.textContent;
+
+    if (currentSong === "Sin reproducir") {
+        mostrarEstadoLyrics(
+            "idle",
+            "Nada reproduciéndose",
+            "Selecciona una canción para ver las letras."
+        );
+
+        return;
+    }    
+
+    const currentRequest = ++requestId;
+
+    mostrarEstadoLyrics(
+        "loading",
+        "Cargando letras...",
+        "Estamos buscando letras sincronizadas."
+    );
+
   try {
     const url = `https://lrclib.net/api/get?track_name=${encodeURIComponent(trackName)}&artist_name=${encodeURIComponent(trackArtist)}`;
 
     const res = await fetch(url);
 
+     if (currentRequest !== requestId) return;
+
     if (!res.ok) {
         letras = [];
-        mostrarSinLetras();
+        mostrarEstadoLyrics(
+                "no-lyrics",
+                "Sin letras disponibles",
+                "No encontramos letras sincronizadas para esta canción."
+            );
         return;
     }
 
@@ -1883,7 +1935,11 @@ async function obtenerLetra(trackName, trackArtist) {
 
     if (!data.syncedLyrics) {
         letras = [];
-        mostrarSinLetras();
+        mostrarEstadoLyrics(
+                "no-lyrics",
+                "Sin letras disponibles",
+                "No encontramos letras sincronizadas para esta canción."
+            );
         return;
     }
 
@@ -1893,7 +1949,11 @@ async function obtenerLetra(trackName, trackArtist) {
     mostrarLetras(letras); // 👈 SOLO aquí
 
   } catch (error) {
-    console.error("Error:", error.message);
+    mostrarEstadoLyrics(
+            "offline",
+            "Sin conexión",
+            "Revisa tu conexión a internet o inténtalo mas tarde."
+        );
   }
 }
 
@@ -1947,6 +2007,160 @@ function actualizarLineaActiva() {
             block: "center"
         });
     }
+}
+
+function mostrarEstadoLyrics(tipo, titulo, subtitulo) {
+
+    const div = document.getElementById("lyrics");
+
+    let icono = "";
+
+    switch (tipo) {
+
+        case "loading":
+            icono = `
+                <svg viewBox="0 0 24 24" fill="none" class="spin">
+                    <path
+                        d="M12 3V6"
+                        stroke="currentColor"
+                        stroke-width="1.8"
+                        stroke-linecap="round"
+                    />
+
+                    <path
+                        d="M12 18V21"
+                        stroke="currentColor"
+                        stroke-width="1.8"
+                        stroke-linecap="round"
+                    />
+
+                    <path
+                        d="M4.93 4.93L7.05 7.05"
+                        stroke="currentColor"
+                        stroke-width="1.8"
+                        stroke-linecap="round"
+                    />
+
+                    <path
+                        d="M16.95 16.95L19.07 19.07"
+                        stroke="currentColor"
+                        stroke-width="1.8"
+                        stroke-linecap="round"
+                    />
+
+                    <path
+                        d="M3 12H6"
+                        stroke="currentColor"
+                        stroke-width="1.8"
+                        stroke-linecap="round"
+                    />
+
+                    <path
+                        d="M18 12H21"
+                        stroke="currentColor"
+                        stroke-width="1.8"
+                        stroke-linecap="round"
+                    />
+
+                    <path
+                        d="M4.93 19.07L7.05 16.95"
+                        stroke="currentColor"
+                        stroke-width="1.8"
+                        stroke-linecap="round"
+                    />
+
+                    <path
+                        d="M16.95 7.05L19.07 4.93"
+                        stroke="currentColor"
+                        stroke-width="1.8"
+                        stroke-linecap="round"
+                    />
+                </svg>
+            `;
+            break;
+
+        case "offline":
+            icono = `
+                <svg viewBox="0 0 24 24" fill="none">
+                    <path
+                        d="M3 9C7.5 5 16.5 5 21 9"
+                        stroke="currentColor"
+                        stroke-width="1.6"
+                        stroke-linecap="round"
+                    />
+
+                    <path
+                        d="M6 12.5C9.5 9.5 14.5 9.5 18 12.5"
+                        stroke="currentColor"
+                        stroke-width="1.6"
+                        stroke-linecap="round"
+                    />
+
+                    <path
+                        d="M9.5 16C11 15 13 15 14.5 16"
+                        stroke="currentColor"
+                        stroke-width="1.6"
+                        stroke-linecap="round"
+                    />
+
+                    <path
+                        d="M3 3L21 21"
+                        stroke="currentColor"
+                        stroke-width="1.8"
+                        stroke-linecap="round"
+                    />
+                </svg>
+            `;
+            break;
+
+        case "idle":
+            icono = `
+                <svg viewBox="0 0 24 24" fill="none">
+                    <path
+                        d="M8 6V18L18 12L8 6Z"
+                        stroke="currentColor"
+                        stroke-width="1.8"
+                        stroke-linejoin="round"
+                    />
+                </svg>
+            `;
+            break;
+
+        default:
+            icono = `
+                <svg viewBox="0 0 24 24" fill="none">
+                    <path
+                        d="M9 18C9 19.1046 7.88071 20 6.5 20C5.11929 20 4 19.1046 4 18C4 16.8954 5.11929 16 6.5 16C7.88071 16 9 16.8954 9 18ZM9 18V6L20 4V16"
+                        stroke="currentColor"
+                        stroke-width="1.5"
+                    />
+
+                    <path
+                        d="M20 16C20 17.1046 18.8807 18 17.5 18C16.1193 18 15 17.1046 15 16C15 14.8954 16.1193 14 17.5 14C18.8807 14 20 14.8954 20 16Z"
+                        stroke="currentColor"
+                        stroke-width="1.5"
+                    />
+                </svg>
+            `;
+    }
+
+    div.innerHTML = `
+        <div class="no-lyrics">
+
+            <div class="no-lyrics-icon">
+                ${icono}
+            </div>
+
+            <p class="no-lyrics-title">${titulo}</p>
+
+            <p class="no-lyrics-subtitle">
+                ${subtitulo}
+            </p>
+
+        </div>
+    `;
+
+    itemsLetras = [];
 }
 
 function mostrarSinLetras() {
