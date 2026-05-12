@@ -33,6 +33,12 @@
                     </svg>
                     Inicio
                 </button>
+                <button class="navigation-button" data-section="buscar">
+                    <svg class="navigation-icon" width="800px" height="800px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M15.7955 15.8111L21 21M18 10.5C18 14.6421 14.6421 18 10.5 18C6.35786 18 3 14.6421 3 10.5C3 6.35786 6.35786 3 10.5 3C14.6421 3 18 6.35786 18 10.5Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    Buscar
+                </button>
                 <button class="navigation-button" data-section="playlists">
                     <svg class="navigation-icon"
                         xmlns="http://www.w3.org/2000/svg"
@@ -121,11 +127,13 @@
                         </button>
                     </div>
 
-                    <div class="playlist-list">
-
-                    </div>
+                    
 
                 </div>
+
+                <div class="playlist-list">
+
+                    </div>
 
             </section>
             
@@ -145,6 +153,38 @@
 
                 </div>
 
+            </section>
+
+            <!-- SECCIÓN DE BÚSQUEDA -->
+            <section id="buscar">
+                <div class="buscar-header">
+                    <h1>Buscar Música</h1>
+                    <p>Encuentra y descarga canciones</p>
+                </div>
+
+                <div class="buscar-search-bar">
+                    <svg class="buscar-search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M15.7955 15.8111L21 21M18 10.5C18 14.6421 14.6421 18 10.5 18C6.35786 18 3 14.6421 3 10.5C3 6.35786 6.35786 3 10.5 3C14.6421 3 18 6.35786 18 10.5Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <input 
+                        type="text" 
+                        id="buscar-input" 
+                        class="buscar-input" 
+                        placeholder="Busca por artista, canción o álbum..."
+                        autocomplete="off"
+                    />
+                </div>
+
+                <div class="buscar-results" id="buscar-results">
+                    <!-- Los resultados se insertarán aquí dinámicamente -->
+                    <div class="buscar-empty-state">
+                        <svg width="80" height="80" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M15.7955 15.8111L21 21M18 10.5C18 14.6421 14.6421 18 10.5 18C6.35786 18 3 14.6421 3 10.5C3 6.35786 6.35786 3 10.5 3C14.6421 3 18 6.35786 18 10.5Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <p>Busca tu música favorita</p>
+                        <span>Encuentra canciones de artistas independientes de todo el mundo</span>
+                    </div>
+                </div>
             </section>
 
             <section id="guardados">
@@ -252,13 +292,26 @@
                             <h1 class="playlist-view-name">Nombre de la playlist</h1>
                             <p class="playlist-view-count">12 canciones</p>
                         </div>
-                        <button class="playlist-view-play">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                                <path d="M8 5v14l11-7z"/>
-                            </svg>
-                        </button>
+                        <div class="playlist-view-options">
+                            <button class="playlist-view-controls">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M11 4h2v9h3l-4 4-4-4h3z"/>
+                                    <path d="M5 19h14v2H5z"/>
+                                </svg>
+                            </button>
+                            <button class="playlist-view-play">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M8 5v14l11-7z"/>
+                                </svg>
+                            </button>
+                            <button class="playlist-view-controls">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75z"/>
+                                    <path d="M20.71 7.04a1 1 0 000-1.41L18.37 3.29a1 1 0 00-1.41 0L15.13 5.12l3.75 3.75z"/>
+                                </svg>
+                            </button>
+                        </div>
                     </div>
-
                 </div>
 
                 <div class="playlist-song-list">
@@ -278,22 +331,74 @@
                 <p id="footer-artist-name">Sin artista</p>
             </div>
             <div class="track-bar">
-                        <p id="footer-start-time">0:00</p>
-                        <input type="range" value="0" min="0" max="100">
-                        <p id="footer-end-time">0:00</p>
+                <p id="footer-start-time">0:00</p>
+                <input type="range" value="0" min="0" max="100">
+                <p id="footer-end-time">0:00</p>
             </div>
             <div class="footer-controls">
                 <button class="footer-btn-back">
-                    <img src="assets/back.png" alt="Anterior">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/>
+                    </svg>
                 </button>
                 <button class="footer-btn-playpause">
-                    <img id="footer-icon-playpause" src="assets/play.png" alt="Reproducir/Pausar">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M8 5v14l11-7z"/>
+                    </svg>
                 </button>
                 <button class="footer-btn-next">
-                    <img src="assets/next.png" alt="Siguiente">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M16 6h2v12h-2zm-1.5 6L6 18V6z"/>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Separador -->
+            <div class="footer-separator"></div>
+
+            <!-- Controles de volumen -->
+            <div class="footer-volume-controls">
+                <button class="footer-volume-btn" id="footer-volume-btn">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                        <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+                    </svg>
+                </button>
+                <div class="footer-volume-slider-container">
+                    <input type="range" min="0" max="100" value="75" step="1" class="footer-volume-slider" id="footer-volume-slider">
+                    <span class="footer-volume-display" id="footer-volume-display">75</span>
+                </div>
+                <button class="footer-queue-btn" id="footer-queue-btn">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="8" y1="6" x2="21" y2="6"></line>
+                        <line x1="8" y1="12" x2="21" y2="12"></line>
+                        <line x1="8" y1="18" x2="21" y2="18"></line>
+                        <line x1="3" y1="6" x2="3.01" y2="6"></line>
+                        <line x1="3" y1="12" x2="3.01" y2="12"></line>
+                        <line x1="3" y1="18" x2="3.01" y2="18"></line>
+                    </svg>
                 </button>
             </div>
         </footer>
+
+        <!-- Modal de Cola de Reproducción -->
+        <div class="queue-modal" id="queue-modal">
+            <div class="queue-modal-header">
+                <div class="queue-modal-title">
+                    <h3>Cola de reproducción</h3>
+                    <p id="queue-count">0 canciones</p>
+                </div>
+                <button class="queue-modal-close" id="queue-modal-close">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <div class="queue-modal-list" id="queue-modal-list">
+                <!-- Las canciones se insertarán aquí dinámicamente -->
+            </div>
+        </div>
 
     </div>
 
